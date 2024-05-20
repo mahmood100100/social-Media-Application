@@ -1,0 +1,46 @@
+:root {
+    --black: #242d49;
+    --orange: #fca61f;
+    --buttonBg: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);
+    --cardColor: rgba(255, 255, 255, 0.64);
+    --inputColor: rgba(40, 52, 62, 0.07);
+  }
+.App{
+    overflow: hidden;
+    color: var(--black);
+    background: #f3f3f3;
+    padding: 1rem 1rem;
+  }
+
+.blur{
+    position: absolute;
+    width: 22rem;
+    height: 14rem;
+    border-radius: 50%;
+    background: #a6ddf0;
+    filter: blur(72px)  ;
+    -webkit-filter: blur(72px)  ;
+}
+
+  .button{
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border:none;
+    border-radius: 0.5rem;
+    background: var(--buttonBg);
+    transition:all 100ms ease-out;
+  }
+  
+  .button:hover{
+    cursor: pointer;
+    color: var(--orange);
+    background: transparent;
+    border: 2px solid var(--orange);
+  }
+  
+  ::-webkit-scrollbar{
+    display: none;
+  }
