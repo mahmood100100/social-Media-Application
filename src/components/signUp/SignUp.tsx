@@ -1,67 +1,156 @@
 import React from 'react';
+import styles from '../../pages/Auth/Auth.module.css';
 import { Link } from 'react-router-dom';
+import { useFormik } from 'formik';
+import { registrationSchema } from '../../pages/Auth/Validation';
+
+interface FormValues {
+  firstname: string;
+  lastname: string;
+  username: string;
+  password: string;
+  confirmpass: string;
+  profilePicture: File | null;
+}
 
 function SignUp() {
+  const initialValues: FormValues = {
+    firstname: '',
+    lastname: '',
+    username: '',
+    password: '',
+    confirmpass: '',
+    profilePicture: null,
+  };
+
+  const onSubmit = (values: FormValues) => {
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) => {
+      if (value instanceof File) {
+        formData.append(key, value, value.name);
+      } else {
+        formData.append(key, value.toString());
+      }
+    });
+    console.log(formik.errors);
+  };
+
+  const formik = useFormik<FormValues>({
+    initialValues,
+    onSubmit,
+    validationSchema: registrationSchema,
+  });
+
   return (
-    <div className="a-right">
-      <form className="infoForm authForm">
+    <div className={styles['right-section']}>
+      <form className={styles.authForm} onSubmit={formik.handleSubmit}>
         <h3>Sign up</h3>
-
-        <div>
-          <input
-            type="text"
-            placeholder="First Name"
-            className="infoInput"
-            name="firstname"
-          />
-          <input
-            type="text"
-            placeholder="Last Name"
-            className="infoInput"
-            name="lastname"
-          />
+        <div className={styles['input-box']}>
+          <div className={styles['form-input']}>
+            <label htmlFor="firstname">First Name</label>
+            <input
+              type="text"
+              placeholder="First Name"
+              className={styles.authInput}
+              name="firstname"
+              id="firstname"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.firstname}
+            />
+            {formik.touched.firstname && formik.errors.firstname && (
+              <p className={styles['error-message']}>{formik.errors.firstname}</p>
+            )}
+          </div>
+          <div className={styles['form-input']}>
+            <label htmlFor="lastname">Last Name</label>
+            <input
+              type="text"
+              placeholder="Last Name"
+              className={styles.authInput}
+              name="lastname"
+              id="lastname"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.lastname}
+            />
+            {formik.touched.lastname && formik.errors.lastname && (
+              <p className={styles['error-message']}>{formik.errors.lastname}</p>
+            )}
+          </div>
+          <div className={styles['form-input']}>
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              className={styles.authInput}
+              name="username"
+              id="username"
+              placeholder="Username"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.username}
+            />
+            {formik.touched.username && formik.errors.username && (
+              <p className={styles['error-message']}>{formik.errors.username}</p>
+            )}
+          </div>
+          <div className={styles['form-input']}>
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              className={styles.authInput}
+              name="password"
+              id="password"
+              placeholder="Password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.password}
+            />
+            {formik.touched.password && formik.errors.password && (
+              <p className={styles['error-message']}>{formik.errors.password}</p>
+            )}
+          </div>
+          <div className={styles['form-input']}>
+            <label htmlFor="confirmpass">Confirm Password</label>
+            <input
+              type="password"
+              className={styles.authInput}
+              name="confirmpass"
+              id="confirmpass"
+              placeholder="Confirm Password"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.confirmpass}
+            />
+            {formik.touched.confirmpass && formik.errors.confirmpass && (
+              <p className={styles['error-message']}>{formik.errors.confirmpass}</p>
+            )}
+          </div>
+          <div className={`${styles['file-input']} ${styles['form-input']}`}>
+            <label htmlFor="profilePicture">Profile picture</label>
+            <input
+              type="file"
+              id="profilePicture"
+              name="profilePicture"
+              onBlur={formik.handleBlur}
+              onChange={(event) =>
+                formik.setFieldValue(
+                  'profilePicture',
+                  event.currentTarget.files ? event.currentTarget.files[0] : null
+                )
+              }
+              accept="image/*"
+            />
+            {formik.touched.profilePicture && formik.errors.profilePicture && (
+              <p className={styles['error-message']}>{formik.errors.profilePicture}</p>
+            )}
+          </div>
         </div>
-
-        <div>
-          <input
-            type="text"
-            className="infoInput"
-            name="username"
-            placeholder="Usernames"
-          />
+        <div className= {styles['to-sign-in-or-up']}>
+          <span style={{ fontSize: '15px', marginRight : '10px' }}>Already have an account?</span>
+          <Link to="/auth" className={styles['sign-link']}>Sign In</Link>
         </div>
-
-        <div>
-          <input
-            type="text"
-            className="infoInput"
-            name="password"
-            placeholder="Password"
-          />
-          <input
-            type="text"
-            className="infoInput"
-            name="confirmpass"
-            placeholder="Confirm Password"
-          />
-        </div>
-
-        <div className="file-input">
-          <label htmlFor="profilePicture" className="custom-file-upload">
-            Choose your profile picture
-          </label>
-          <input
-            type="file"
-            id="profilePicture"
-            name="profilePicture"
-          />
-        </div>
-
-        <div>
-          <span style={{ fontSize: '15px' }}>Already have an account.</span>
-          <Link to={"/auth"} className="sign-link">Sign In</Link>
-        </div>
-        <button className="button infoButton" type="submit">Signup</button>
+        <button className={`${styles.authButton} button`} type="submit">Signup</button>
       </form>
     </div>
   );
