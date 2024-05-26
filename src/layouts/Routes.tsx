@@ -1,8 +1,9 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
 import UserLayout from './UserLayout';
-import SignIn from '../components/signIn/SignIn';
-import Auth from '../pages/Auth/Auth';
-import SignUp from '../components/signUp/SignUp';
+import SignIn from '../Components/SignIn/SignIn';
+import Auth from '../Pages/Auth/Auth';
+import SignUp from '../Components/SignUp/SignUp';
+import UserHomePage from '../Pages/UserHomePage/UserHomePage';
 
 const routes: RouteObject[] = [
   {
@@ -25,6 +26,10 @@ const routes: RouteObject[] = [
         element: <SignUp />,
       },
     ],
+  },
+  {
+    path: 'homePage',
+    element: <UserHomePage/>
   },
 ];
 

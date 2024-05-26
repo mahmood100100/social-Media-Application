@@ -1,5 +1,5 @@
 import styles from './Auth.module.css';
-import Logo from "../../assets/img/logo.png";
+import Logo from "../../assets/Images/logo.png";
 import { Outlet } from 'react-router-dom';
 
 function Auth() {

@@ -1,4 +1,3 @@
-import React from 'react';
 import {Navigate } from 'react-router-dom';
 function UserLayout(){
   const token: string | null = localStorage.getItem('user_profile_token');
