@@ -1,6 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import "@mantine/core/styles.css";
 import { router } from "./Layouts/Routes.tsx";
+import "@mantine/core/styles.css";
 import './App.css'
 
 function App() {
