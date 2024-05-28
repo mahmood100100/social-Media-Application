@@ -1,8 +1,8 @@
-import React from 'react';
 import styles from '../../pages/Auth/Auth.module.css';
 import { Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { registrationSchema } from '../../pages/Auth/Validation';
+import { Bounce, toast } from 'react-toastify';
 
 interface FormValues {
   firstname: string;
@@ -26,13 +26,25 @@ function SignUp() {
   const onSubmit = (values: FormValues) => {
     const formData = new FormData();
     Object.entries(values).forEach(([key, value]) => {
-      if (value instanceof File) {
+      if (value instanceof File || value == null) {
         formData.append(key, value, value.name);
       } else {
-        formData.append(key, value.toString());
+        formData.append(key, value);
       }
     });
-    console.log(formik.errors);
+
+    toast.success('your accout created successfully', {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
+
   };
 
   const formik = useFormik<FormValues>({
@@ -40,6 +52,22 @@ function SignUp() {
     onSubmit,
     validationSchema: registrationSchema,
   });
+
+  const checkValidity = () => {
+    if (!formik.isValid) {
+      toast.error('Fix the errors and try again', {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  }
 
   return (
     <div className={styles['right-section']}>
@@ -146,11 +174,11 @@ function SignUp() {
             )}
           </div>
         </div>
-        <div className= {styles['to-sign-in-or-up']}>
-          <span style={{ fontSize: '15px', marginRight : '10px' }}>Already have an account?</span>
+        <div className={styles['to-sign-in-or-up']}>
+          <span style={{ fontSize: '15px', marginRight: '10px' }}>Already have an account?</span>
           <Link to="/auth" className={styles['sign-link']}>Sign In</Link>
         </div>
-        <button className={`${styles.authButton} button`} type="submit">Signup</button>
+        <button onClick={checkValidity} className={`button ${styles.authButton} `} type="submit">Signup</button>
       </form>
     </div>
   );

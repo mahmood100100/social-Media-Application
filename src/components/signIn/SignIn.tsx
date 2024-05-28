@@ -3,6 +3,7 @@ import styles from '../../pages/Auth/Auth.module.css'
 import './SignIn.css'
 import { logInSchema } from '../../pages/Auth/Validation'
 import {useFormik} from 'formik'
+import { Bounce, toast } from 'react-toastify'
 
 interface FormValues {
   username: string;
@@ -18,6 +19,17 @@ function SignIn() {
 
   const onSubmit = (values: FormValues) => {
     console.log(values)
+    toast.success('your accout created successfully', {
+      position: "top-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+      });
   };
 
   const formik = useFormik<FormValues>({
@@ -25,6 +37,22 @@ function SignIn() {
     onSubmit,
     validationSchema: logInSchema,
   });
+
+  const checkValidity = () => {
+    if (!formik.isValid) {
+      toast.error('Fix the errors and try again', {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  }
 
 
   return (
@@ -74,7 +102,7 @@ function SignIn() {
           <Link to={"signUp"} className={styles['sign-link']}>Sign Up</Link>
         </div>
 
-        <button className={`${styles.authButton} button`} type="submit">SignIn</button>
+        <button onClick={checkValidity} className={`${styles.authButton} button`} type="submit">SignIn</button>
 
       </form>
     </div>
