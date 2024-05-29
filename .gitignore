@@ -25,3 +25,4 @@ dist-ssr
 
 # files
 src/vite-env.d.ts
+.env
