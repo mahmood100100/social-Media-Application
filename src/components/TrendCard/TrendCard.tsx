@@ -15,4 +15,5 @@ const TrendCard: React.FC = () => {
     </div>
   );
 };
+
 export default TrendCard;
