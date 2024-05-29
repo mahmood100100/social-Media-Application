@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 import styles from '../../pages/Auth/Auth.module.css'
 import './SignIn.css'
-import { logInSchema } from '../../pages/Auth/Validation'
+import { logInSchema } from '../../pages/Auth/Validation.ts'
 import {useFormik} from 'formik'
 import { Bounce, toast } from 'react-toastify'
-
+import { userLogin } from '../../Api/AuthApi.ts'
 interface FormValues {
   username: string;
   password: string;
@@ -17,19 +17,37 @@ function SignIn() {
     password: '',
   };
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values)
-    toast.success('your accout created successfully', {
-      position: "top-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
+  const onSubmit = async (values: FormValues) => {
+    const response = await userLogin(values);
+    if(response.data) {
+      toast.success('login successfully', {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
       });
+
+      console.log(response.data.token);
+
+    } else if(response.error) {
+      toast.error(response.error, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+    
   };
 
   const formik = useFormik<FormValues>({
