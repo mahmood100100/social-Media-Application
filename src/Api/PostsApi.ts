@@ -1,29 +1,16 @@
-import postPic1 from '../assets/Images/postpic1.jpg';
-import postPic2 from '../assets/Images/postpic2.jpg';
-import postPic3 from '../assets/Images/postpic3.jpg';
-
+import axios from 'axios';
+import { BaseApiUrl } from './ApiConfig';
 import { PostType } from '../DataTypes/PostType';
 
-export const PostsData: PostType[] = [
-  {
-    img: postPic1,
-    name: 'Tzuyu',
-    desc: "Happy New Year all friends! #2023",
-    likes: 2300,
-    liked: true,
-  },
-  {
-    img: postPic2,
-    name: 'Maryam',
-    desc: "Party time :)",
-    likes: 2300,
-    liked: false,
-  },
-  {
-    img: postPic3,
-    name: "Salena Gomez",
-    desc: "At Archery Festival",
-    likes: 800,
-    liked: false,
-  },
-];
+const limit = 60;
+
+export const fetchPosts = async (): Promise<PostType[]> => {
+    try {
+        const response = await axios.get(`${BaseApiUrl}/posts?limit=${limit}`);
+        const postsData : PostType[] = response.data.data;
+        return postsData;
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        throw error;
+    }
+};

@@ -1,31 +1,43 @@
 import React from 'react';
-import styles from './Post.module.css';
 import Comment from '../../assets/Images/comment.png';
 import Share from '../../assets/Images/share.png';
 import Heart from '../../assets/Images/like.png';
-import NotLike from '../../assets/Images/dislike.png';
 import { PostType } from '../../DataTypes/PostType';
+import styles from './Post.module.css';
 
 interface PostProps {
-  data: PostType;
+  key: number;
+  post: PostType;
 }
 
-const Post: React.FC<PostProps> = ({ data }) => {
+const Post: React.FC<PostProps> = ({ post }) => {
   return (
     <div className={styles.Post}>
-      <img src={data.img} alt="" />
-
-      <div className={styles.postReact}>
-        <img src={data.liked ? Heart : NotLike} alt="" />
-        <img src={Comment} alt="" />
-        <img src={Share} alt="" />
+      <div className={styles.header}>
+        {post.author.profile_image && (
+          <img src={post.author.profile_image} alt={post.author.name} className={styles.authorImage} />
+        )}
+        <div className={styles.authorInfo}>
+          <span className={styles.authorName}><b>{post.author.name}</b></span>
+          <span className={styles.createdAt}>{post.created_at}</span>
+        </div>
       </div>
 
-      <span style={{ color: "var(--gray)", fontSize: '12px' }}>{data.likes} likes</span>
+      <div className={styles.body}>
+        <h2 className={styles.title}>{post.title || 'Untitled'}</h2>
+        <p className={styles.text}>{post.body}</p>
+        {post.image && (
+          <img src={post.image} alt={post.title || 'Post image'} className={styles.postImage} />
+        )}
+      </div>
 
-      <div className={styles.detail}>
-        <span><b>{data.name}</b></span>
-        <span> {data.desc}</span>
+      <div className={styles.footer}>
+        <div className={styles.reactions}>
+          <img src={Heart} alt="like" />
+          <img src={Comment} alt="comment" />
+          <img src={Share} alt="share" />
+        </div>
+        <span className={styles.commentsCount}>{post.comments_count} comments</span>
       </div>
     </div>
   );

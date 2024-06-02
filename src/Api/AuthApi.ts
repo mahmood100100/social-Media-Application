@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { BaseApiUrl } from "./ApiConfig";
 interface RegistrationResponse {
   data?: string ; 
   errors?: any; 
@@ -13,7 +13,7 @@ interface loginData {
 export const AddUser = async (data: FormData): Promise<RegistrationResponse> => {
   try {
     await axios.post(
-      `${import.meta.env.VITE_BASE_API_URL}/register`,
+      `${BaseApiUrl}/register`,
       data,
       {
         headers: {
@@ -26,9 +26,15 @@ export const AddUser = async (data: FormData): Promise<RegistrationResponse> => 
 
   } catch (error: any) {
     
-    if (axios.isAxiosError(error) && error.response) {
-      const errors = error.response.data;
-      return { errors };
+    if (error.response) {
+      const errorsBox = error.response.data;
+      if(errorsBox.errors) {
+        console.log(errorsBox.errors)
+        return errorsBox
+      }
+      else {
+        return { errors: { network: "An error occurred. Please try again later." } };
+      }
     } else {
       return { errors: { network: "An error occurred. Please try again later." } };
     }
@@ -38,10 +44,10 @@ export const AddUser = async (data: FormData): Promise<RegistrationResponse> => 
 
 export const userLogin = async (data: loginData) => {
   try {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_API_URL}/login`, data);
+    const response = await axios.post(`${BaseApiUrl}/login`, data);
     return { data: response.data };
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
+  } catch (error : any) {
+    if (error.response) {
       return { error: error.response.data.message };
     } else {
       return { error: "An error occurred. Please try again later." };

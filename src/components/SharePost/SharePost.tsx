@@ -24,33 +24,40 @@ const SharePost: React.FC = () => {
     }
   };
 
+  const handleRemoveImage = () => {
+    setImage(null);
+    if (imageRef.current) {
+      imageRef.current.value = '';
+    }
+  };
+
   return (
-    <div className= {styles.PostShare}>
-      <img className= {styles.PostShareImg} src={ProfileImage} alt="" />
-      <div className= {styles.PostShareDiv}>
-        <input className= {styles.PostShareInput} type="text" placeholder="What's happening" />
-        <div className= {styles.postOptions}>
+    <div className={styles.PostShare}>
+      <img className={styles.PostShareImg} src={ProfileImage} alt="" />
+      <div className={styles.PostShareDiv}>
+        <input className={styles.PostShareInput} type="text" placeholder="What's happening" />
+        <div className={styles.postOptions}>
           <div
-            className= {styles.option}
+            className={styles.option}
             style={{ color: "var(--photo)" }}
             onClick={() => imageRef.current?.click()}
           >
             <UilScenery />
             Photo
           </div>
-          <div className= {styles.option} style={{ color: "var(--video)" }}>
+          <div className={styles.option} style={{ color: "var(--video)" }}>
             <UilPlayCircle />
             Video
           </div>
-          <div className= {styles.option} style={{ color: "var(--location)" }}>
+          <div className={styles.option} style={{ color: "var(--location)" }}>
             <UilLocationPoint />
             Location
           </div>
-          <div className= {styles.option} style={{ color: "var(--schedule)" }}>
+          <div className={styles.option} style={{ color: "var(--schedule)" }}>
             <UilSchedule />
             Schedule
           </div>
-          <button className= {`button ${styles.psButton}`}>Share</button>
+          <button className={`button ${styles.psButton}`}>Share</button>
           <div style={{ display: "none" }}>
             <input
               type="file"
@@ -61,9 +68,9 @@ const SharePost: React.FC = () => {
           </div>
         </div>
         {image && (
-          <div className= {styles.previewImage}>
-            <UilTimes onClick={() => setImage(null)} />
-            <img className= {styles.previewImageImg} src={image.image} alt="" />
+          <div className={styles.previewImage}>
+            <UilTimes onClick={handleRemoveImage} />
+            <img className={styles.previewImageImg} src={image.image} alt="" />
           </div>
         )}
       </div>

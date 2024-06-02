@@ -65,7 +65,7 @@ function SignUp() {
 
     } else if (response.errors) {
 
-      setRegisrtionErrors(response.errors.errors);
+      setRegisrtionErrors(response.errors);
 
       if (response.errors.network) {
         toast.error('An error occurred. Please try again later.', {

@@ -1,5 +1,5 @@
 import React from 'react'
-import ProfileSide from '../../Components/ProfileSide/ProfileSide'
+import ProfileSide from '../../Components/ProfileSide/ProfileSide.tsx'
 import PostSide from '../../Components/PostSide/PostSide'
 import TrendsSide from '../../Components/TrendsSide/TrendsSide'
 import styles from './UserHomePage.module.css'
