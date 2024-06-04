@@ -5,15 +5,7 @@ import { registrationSchema } from '../../pages/Auth/Validation';
 import { Bounce, toast } from 'react-toastify';
 import { AddUser } from '../../Api/AuthApi';
 import { useState } from 'react';
-
-interface FormValues {
-  name: string;
-  email: string;
-  username: string;
-  password: string;
-  confirmpass: string;
-  image: File | null;
-}
+import {UserSignUpValues} from '../../DataTypes/UserType'
 
 interface regisrtationErrorsObject {
   username: string[] | null;
@@ -24,7 +16,7 @@ function SignUp() {
 
   const [regisrtationErrors, setRegisrtionErrors] = useState<regisrtationErrorsObject | null>(null);
   const navigate = useNavigate();
-  const initialValues: FormValues = {
+  const initialValues: UserSignUpValues = {
     name: '',
     email: '',
     username: '',
@@ -33,7 +25,7 @@ function SignUp() {
     image: null,
   };
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: UserSignUpValues) => {
     const formData = new FormData();
 
     Object.entries(values).forEach(([key, value]) => {
@@ -83,7 +75,7 @@ function SignUp() {
     }
   };
 
-  const formik = useFormik<FormValues>({
+  const formik = useFormik<UserSignUpValues>({
     initialValues,
     onSubmit,
     validationSchema: registrationSchema,

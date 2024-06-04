@@ -1,19 +1,19 @@
-import axios from "axios";
-import { BaseApiUrl } from "./ApiConfig";
+import api from "./ApiConfig";
+
 interface RegistrationResponse {
-  data?: string ; 
-  errors?: any; 
+  data?: string;
+  errors?: any;
 }
 
 interface loginData {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
 export const AddUser = async (data: FormData): Promise<RegistrationResponse> => {
   try {
-    await axios.post(
-      `${BaseApiUrl}/register`,
+    await api.post(
+      `/register`,
       data,
       {
         headers: {
@@ -21,18 +21,15 @@ export const AddUser = async (data: FormData): Promise<RegistrationResponse> => 
         },
       }
     );
-    
-    return { data: "account created successfully" };
+
+    return { data: "Account created successfully" };
 
   } catch (error: any) {
-    
     if (error.response) {
       const errorsBox = error.response.data;
-      if(errorsBox.errors) {
-        console.log(errorsBox.errors)
-        return errorsBox
-      }
-      else {
+      if (errorsBox.errors) {
+        return errorsBox;
+      } else {
         return { errors: { network: "An error occurred. Please try again later." } };
       }
     } else {
@@ -41,12 +38,11 @@ export const AddUser = async (data: FormData): Promise<RegistrationResponse> => 
   }
 };
 
-
 export const userLogin = async (data: loginData) => {
   try {
-    const response = await axios.post(`${BaseApiUrl}/login`, data);
+    const response = await api.post(`/login`, data);
     return { data: response.data };
-  } catch (error : any) {
+  } catch (error: any) {
     if (error.response) {
       return { error: error.response.data.message };
     } else {
@@ -54,4 +50,3 @@ export const userLogin = async (data: loginData) => {
     }
   }
 };
-

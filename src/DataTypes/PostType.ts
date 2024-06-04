@@ -1,4 +1,4 @@
-export interface AuthorType {
+export interface PostAuthorType {
   id: number;
   profile_image: string
   is_fake: number;
@@ -15,7 +15,7 @@ export interface PostType {
   id: number;
   title: string | null;
   body: string;
-  author: AuthorType;
+  author: PostAuthorType;
   image: string ;
   tags: string[];
   created_at: string;

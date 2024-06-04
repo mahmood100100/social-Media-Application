@@ -5,21 +5,18 @@ import { logInSchema } from '../../pages/Auth/Validation.ts'
 import {useFormik} from 'formik'
 import { Bounce, toast } from 'react-toastify'
 import { userLogin } from '../../Api/AuthApi.ts'
-interface FormValues {
-  username: string;
-  password: string;
-}
+import { UserSignInValues } from '../../DataTypes/UserType.ts'
 
 function SignIn() {
 
   const navigate = useNavigate();
 
-  const initialValues: FormValues = {
+  const initialValues: UserSignInValues = {
     username: '',
     password: '',
   };
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: UserSignInValues) => {
     const response = await userLogin(values);
     if(response.data) {
       toast.success('login successfully', {
@@ -34,8 +31,10 @@ function SignIn() {
         transition: Bounce,
       });
 
-      console.log(response.data.token);
+      console.log(response.data.user);
       localStorage.setItem('userToken' , response.data.token );
+      localStorage.setItem('userData' , JSON.stringify(response.data.user));
+
       navigate('/home');
 
     } else if(response.error) {
@@ -54,7 +53,7 @@ function SignIn() {
     
   };
 
-  const formik = useFormik<FormValues>({
+  const formik = useFormik<UserSignInValues>({
     initialValues,
     onSubmit,
     validationSchema: logInSchema,

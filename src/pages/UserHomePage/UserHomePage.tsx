@@ -5,6 +5,7 @@ import TrendsSide from '../../Components/TrendsSide/TrendsSide'
 import styles from './UserHomePage.module.css'
 
 function UserHomePage() {
+
   return (
     <div className= {styles.Home}>
      <ProfileSide/>
