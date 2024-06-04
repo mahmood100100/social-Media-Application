@@ -4,18 +4,23 @@ import SignIn from '../Components/SignIn/SignIn';
 import Auth from '../Pages/Auth/Auth';
 import SignUp from '../Components/SignUp/SignUp';
 import UserHomePage from '../Pages/UserHomePage/UserHomePage';
+import HomeProtectedRoute from '../PretectedRoutes/HomeProtectedRoute'
+import AuthProtectedRoute from '../PretectedRoutes/AuthProtectedRoute';
 
 const routes: RouteObject[] = [
   {
     path: '/',
     element: <UserLayout />,
     children: [
-      
+
     ],
   },
   {
     path: 'auth',
-    element: <Auth />,
+    element:
+    <AuthProtectedRoute>
+     <Auth />
+     </AuthProtectedRoute>,
     children: [
       {
         index: true,
@@ -28,8 +33,12 @@ const routes: RouteObject[] = [
     ],
   },
   {
-    path: 'homePage',
-    element: <UserHomePage/>
+    path: 'home',
+    element:
+      <HomeProtectedRoute>
+        <UserHomePage />
+      </HomeProtectedRoute>
+
   },
 ];
 

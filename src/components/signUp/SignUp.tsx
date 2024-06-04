@@ -177,6 +177,27 @@ function SignUp() {
             {regisrtationErrors && regisrtationErrors.username &&
               <p className={styles['error-message']}>{regisrtationErrors.username[0]}</p>}
           </div>
+
+          <div className={`${styles['file-input']} ${styles['form-input']}`}>
+            <label htmlFor="image">Profile Image</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              onBlur={formik.handleBlur}
+              onChange={(event) =>
+                formik.setFieldValue(
+                  'image',
+                  event.currentTarget.files ? event.currentTarget.files[0] : null
+                )
+              }
+              accept="image/*"
+            />
+            {formik.touched.image && formik.errors.image && (
+              <p className={styles['error-message']}>{formik.errors.image}</p>
+            )}
+          </div>
+          
           <div className={styles['form-input']}>
             <label htmlFor="password">Password</label>
             <input
@@ -207,25 +228,6 @@ function SignUp() {
             />
             {formik.touched.confirmpass && formik.errors.confirmpass && (
               <p className={styles['error-message']}>{formik.errors.confirmpass}</p>
-            )}
-          </div>
-          <div className={`${styles['file-input']} ${styles['form-input']}`}>
-            <label htmlFor="image">Profile Image</label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              onBlur={formik.handleBlur}
-              onChange={(event) =>
-                formik.setFieldValue(
-                  'image',
-                  event.currentTarget.files ? event.currentTarget.files[0] : null
-                )
-              }
-              accept="image/*"
-            />
-            {formik.touched.image && formik.errors.image && (
-              <p className={styles['error-message']}>{formik.errors.image}</p>
             )}
           </div>
         </div>

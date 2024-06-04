@@ -1,7 +1,72 @@
-.Posts{
+.Posts {
     display: flex;
     align-items: center;
     flex-direction: column;
     gap: 1rem;
-    
+    width: 100%;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.card {
+    padding: 50px;
+    margin: 10px;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.card.is-loading .image,
+.card.is-loading h2,
+.card.is-loading p {
+    background: #eee;
+    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+    border-radius: 5px;
+    background-size: 200% 100%;
+    animation: shine 1.5s linear infinite;
+}
+
+.card.is-loading .image {
+    height: 200px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.card.is-loading h2 {
+    height: 30px;
+}
+
+.card.is-loading p {
+    height: 70px;
+}
+
+@keyframes shine {
+    to {
+        background-position-x: -200%;
+    }
+}
+
+.error {
+    padding: 50px;
+    margin: 10px;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    text-align: center;
+    background: linear-gradient(to bottom left, #ef8d9c 40%, #ffc39e 100%);
+    color: white;
 }

@@ -1,11 +1,11 @@
 import React, { useRef, useState, ChangeEvent } from 'react';
-import styles from './SharePost.module.css';
 import ProfileImage from '../../assets/Images/profileImg.jpg';
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 import { UilLocationPoint } from "@iconscout/react-unicons";
 import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
+import styles from './SharePost.module.css';
 
 interface ImageState {
   image: string;

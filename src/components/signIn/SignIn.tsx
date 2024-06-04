@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from '../../pages/Auth/Auth.module.css'
 import './SignIn.css'
 import { logInSchema } from '../../pages/Auth/Validation.ts'
@@ -11,6 +11,8 @@ interface FormValues {
 }
 
 function SignIn() {
+
+  const navigate = useNavigate();
 
   const initialValues: FormValues = {
     username: '',
@@ -33,6 +35,8 @@ function SignIn() {
       });
 
       console.log(response.data.token);
+      localStorage.setItem('userToken' , response.data.token );
+      navigate('/home');
 
     } else if(response.error) {
       toast.error(response.error, {
