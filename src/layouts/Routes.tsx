@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import UserLayout from './UserLayout';
-import SignIn from '../Components/SignIn/SignIn';
+import UserLayout from './UserLayout.tsx';
+import SignIn from '../Components/SignIn/SignIn.tsx';
 import Auth from '../Pages/Auth/Auth';
 import SignUp from '../Components/SignUp/SignUp';
 import UserHomePage from '../Pages/UserHomePage/UserHomePage';

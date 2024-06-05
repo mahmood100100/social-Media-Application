@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Post from '../Post/Post';
 import { fetchPosts } from '../../Api/PostsApi';
-import { PostType } from '../../DataTypes/PostType';
+import { GetPost } from '../../DataTypes/PostType';
 import styles from './Posts.module.css';
 
 const Posts: React.FC = () => {
-  const [posts, setPosts] = useState<PostType[]>([]);
+  const [posts, setPosts] = useState<GetPost[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
