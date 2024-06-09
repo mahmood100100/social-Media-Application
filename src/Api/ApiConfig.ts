@@ -17,8 +17,6 @@ api.interceptors.request.use(
     if (config.method !== 'get' && !excludeTokenEndpoints.includes(config.url ? config.url : "")) {
       const token = localStorage.getItem('userToken');
       if (token) {
-        console.log(token)
-        console.log(config.headers['Content-Type'])
         config.headers['Authorization'] = `Bearer ${token}`;
       }
     }

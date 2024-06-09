@@ -11,10 +11,10 @@ export const fetchPosts = async (currentPage: number): Promise<GetPost[]> => {
     }
 };
 
-export const addPost = async (postData: CreatePost): Promise<CreatePost> => {
+export const addPost = async (postData: CreatePost): Promise<GetPost> => {
     try {
       const response = await api.post('/posts', postData , { headers : { 'Content-Type' : 'multipart/form-data'}});
-      return response.data;
+      return response.data.data;
     } catch (error : any) {
       throw new Error(error.response.data.message);
     }

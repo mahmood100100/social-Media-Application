@@ -1,3 +1,4 @@
+import { Comment } from "./CommentsType";
 export interface PostAuthor {
   id: number;
   profile_image: string
@@ -26,5 +27,17 @@ export interface CreatePost {
   title: string | undefined;
   body: string;
   image: File | undefined;
+}
+
+export interface PostWithComments {
+  id: number;
+  title: string | null;
+  body: string;
+  author: PostAuthor;
+  image: string ;
+  tags: string[];
+  created_at: string;
+  comments_count: number;
+  comments : Comment[];
 }
 

@@ -1,16 +1,20 @@
 import React, { useRef, useState, ChangeEvent } from 'react';
-import ProfileImage from '../../assets/Images/profileImg.jpg';
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilPlayCircle } from "@iconscout/react-unicons";
 import { UilLocationPoint } from "@iconscout/react-unicons";
 import { UilSchedule } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { CreatePost } from '../../DataTypes/PostType';
-import styles from './SharePost.module.css';
 import { useFormik } from 'formik';
 import { sharePostSchema } from '../../pages/UserHomePage/Validation';
 import { addPost } from '../../Api/PostsApi';
 import { Bounce, toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../State/Store';
+import { saveNewPost } from '../../State/Posts/PostsSlice';
+import { incrementUserPostsCount } from '../../State/User/UserSlice';
+import styles from './SharePost.module.css';
+
 interface ImageState {
   imageFile: File,
   imageUrl: string
@@ -19,6 +23,9 @@ interface ImageState {
 const SharePost: React.FC = () => {
   const [image, setImage] = useState<ImageState | null>(null);
   const imageRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
+
+  const user = useSelector((state: RootState) => state.user);
 
   const initialValues: CreatePost = {
     title: '',
@@ -29,7 +36,10 @@ const SharePost: React.FC = () => {
   const onSubmit = async (values: CreatePost) => {
     values.image = image?.imageFile;
     try {
-      await addPost(values);
+      const response = await addPost(values);
+      dispatch(saveNewPost(response))
+      console.log(response)
+      dispatch(incrementUserPostsCount())
       setImage(null);
       formik.resetForm();
       toast.success('Post added successfully', {
@@ -83,7 +93,7 @@ const SharePost: React.FC = () => {
 
   return (
     <div className={styles.PostShare}>
-      <img className={styles.PostShareImg} src={ProfileImage} alt="" />
+      <img className={styles.PostShareImg} src={user.profile_image} alt="" />
       <div className={styles.PostShareDiv}>
         <div className={styles.postContent}>
           <input
@@ -95,9 +105,6 @@ const SharePost: React.FC = () => {
             type="text"
             placeholder="Post Title"
           />
-          {formik.touched.title && formik.errors.title && (
-            <div className={styles.error}>{formik.errors.title}</div>
-          )}
           <input
             name='body'
             onChange={formik.handleChange}
@@ -107,9 +114,6 @@ const SharePost: React.FC = () => {
             type="text"
             placeholder="What's happening"
           />
-          {formik.touched.body && formik.errors.body && (
-            <div className={styles.error}>{formik.errors.body}</div>
-          )}
         </div>
         <div className={styles.postOptions}>
           <div

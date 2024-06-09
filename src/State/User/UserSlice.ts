@@ -17,10 +17,15 @@ const userSlice = createSlice({
   reducers: {
     saveUserData: (state, action: PayloadAction<UserData>) => {
       return { ...state, ...action.payload };
+    },
+    incrementUserCommentsCount: (state) => {
+      state.comments_count += 1;
+    },
+    incrementUserPostsCount: (state) => {
+      state.posts_count += 1;
     }
   }
 });
 
-export const { saveUserData } = userSlice.actions;
-
+export const { saveUserData, incrementUserCommentsCount, incrementUserPostsCount } = userSlice.actions;
 export default userSlice.reducer;
