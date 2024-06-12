@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 import Cover from '../../assets/Images/cover.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { UserData } from '../../DataTypes/UserType';
 import { fetchUser } from '../../Api/UserApi';
 import { saveUserData } from '../../State/User/UserSlice';
 import styles from './ProfileCard.module.css';
-import loadingStyle from '../Posts/Posts.module.css'
+import loadingStyle from '../Posts/Posts.module.css';
+
 function ProfileCard() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const userData = useSelector((state: { user: UserData }) => state.user);
+  const currentPage = useSelector((state: { page: { currentPage: string } }) => state.page.currentPage);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { profileId } = useParams();
 
   const logOut = () => {
     localStorage.removeItem('userToken');
@@ -20,26 +23,30 @@ function ProfileCard() {
     navigate('/auth');
   };
 
-  const ProfilePage: boolean = false;
+  const handleProfilePage = () => {
+    navigate(`/profile/${userData.id}`);
+  };
 
   useEffect(() => {
-    if (!userData.id) {
-      const id = Number.parseInt(localStorage.getItem("userId") || "");
+    let id = Number.parseInt(profileId || '');
+    if (currentPage === "home") 
+      id = Number.parseInt(localStorage.getItem('userId') || '', 10);
+    if(userData.id !== id){
       fetchUser(id)
-        .then(response => {
-          dispatch(saveUserData(response));
-        })
-        .catch(error => {
-          console.error('Error fetching user data:', error);
-          setError('Error fetching user data. Please try again.');
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      .then(response => {
+        dispatch(saveUserData(response));
+      })
+      .catch(error => {
+        console.error('Error fetching user data:', error);
+        setError('Error fetching user data. Please try again.');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
     } else {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [userData.id]);
 
   if (isLoading) {
     return (
@@ -54,7 +61,6 @@ function ProfileCard() {
       </div>
     );
   }
-
 
   if (error) {
     return <div>{error}</div>;
@@ -85,22 +91,24 @@ function ProfileCard() {
             <span className={styles.followSpan}>Comments</span>
           </div>
 
-          {ProfilePage && (
+          {currentPage === 'yourProfile' && (
             <>
               <div className={styles.vl}></div>
               <div className={styles.follow}>
-                <span className={styles.followSpan}>3</span>
-                <span className={styles.followSpan}>Posts</span>
+                <span className={styles.followSpan}>100</span>
+                <span className={styles.followSpan}>Followers</span>
               </div>
             </>
           )}
         </div>
         <hr />
       </div>
-      <div className={styles.cardButtons}>
-        {ProfilePage ? "" : <button className={'button'}>My Profile</button>}
-        <button onClick={() => logOut()} className={'button'}>Log Out</button>
-      </div>
+      {currentPage === 'home' &&
+        <div className={styles.cardButtons}>
+          <button onClick={handleProfilePage} className={'button'}>My Profile</button>
+          <button onClick={logOut} className={'button'}>Log Out</button>
+        </div>
+      }
     </div>
   );
 }

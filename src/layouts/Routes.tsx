@@ -6,6 +6,7 @@ import SignUp from '../Components/SignUp/SignUp';
 import UserHomePage from '../Pages/UserHomePage/UserHomePage';
 import HomeProtectedRoute from '../PretectedRoutes/HomeProtectedRoute'
 import AuthProtectedRoute from '../PretectedRoutes/AuthProtectedRoute';
+import UserProfilePage from '../pages/UserProfilePage/UserProfilePage.tsx';
 
 const routes: RouteObject[] = [
   {
@@ -40,6 +41,13 @@ const routes: RouteObject[] = [
       </HomeProtectedRoute>
 
   },
+  {
+    path: 'profile/:profileId',
+    element:
+    <HomeProtectedRoute>
+       <UserProfilePage/>
+    </HomeProtectedRoute>
+  }
 ];
 
 export const router = createBrowserRouter(routes);

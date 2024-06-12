@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchPostWithComments, shareComment } from '../../Api/CommentsApi';
 import { incrementUserCommentsCount } from '../../State/User/UserSlice';
 import { editPostCommentsCount } from '../../State/Posts/PostsSlice';
-import {saveComments } from '../../State/Comments/CommentsSlice';
+import { saveComments } from '../../State/Comments/CommentsSlice';
+import {RootState} from '../../State/Store'
 import styles from './ShareComment.module.css';
 import { Bounce, toast } from 'react-toastify';
+
 interface ShareCommentProps {
     postId: number;
 }
@@ -15,6 +17,8 @@ const ShareComment: React.FC<ShareCommentProps> = ({ postId }) => {
 
     const [commentBody, setCommentBody] = useState('');
 
+    const page: string = useSelector((state: RootState) => state.page.currentPage);
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCommentBody(event.target.value);
     };
@@ -22,10 +26,10 @@ const ShareComment: React.FC<ShareCommentProps> = ({ postId }) => {
     const handleSubmit = async () => {
         try {
             await shareComment(postId, commentBody);
-            const {comments , comments_count} = await fetchPostWithComments(postId)
+            const { comments, comments_count } = await fetchPostWithComments(postId);
             dispatch(saveComments(comments));
-            dispatch(incrementUserCommentsCount())
-            dispatch(editPostCommentsCount({postId , commentsCount:comments_count}))
+            dispatch(incrementUserCommentsCount());
+            dispatch(editPostCommentsCount({ postId, commentsCount: comments_count, page }));
             setCommentBody('');
             toast.success('comment added successfully', {
                 position: "top-left",
@@ -37,8 +41,7 @@ const ShareComment: React.FC<ShareCommentProps> = ({ postId }) => {
                 progress: undefined,
                 theme: "light",
                 transition: Bounce,
-              });
-        
+            });
         } catch (error) {
             toast.error(`${error}`, {
                 position: "top-left",
@@ -50,7 +53,7 @@ const ShareComment: React.FC<ShareCommentProps> = ({ postId }) => {
                 progress: undefined,
                 theme: "light",
                 transition: Bounce,
-              });
+            });
         }
     };
 

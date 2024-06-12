@@ -26,6 +26,7 @@ const SharePost: React.FC = () => {
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user);
+  const currentPage = useSelector((state: RootState) => state.page.currentPage)
 
   const initialValues: CreatePost = {
     title: '',
@@ -37,8 +38,7 @@ const SharePost: React.FC = () => {
     values.image = image?.imageFile;
     try {
       const response = await addPost(values);
-      dispatch(saveNewPost(response))
-      console.log(response)
+      dispatch(saveNewPost({post : response , page: currentPage}))
       dispatch(incrementUserPostsCount())
       setImage(null);
       formik.resetForm();

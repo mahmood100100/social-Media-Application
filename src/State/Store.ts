@@ -2,12 +2,14 @@ import {configureStore} from '@reduxjs/toolkit'
 import userReducer from './User/UserSlice'
 import commentsReducer from './Comments/CommentsSlice'
 import postsReducer from './Posts/PostsSlice'
+import CurrentPageReducer from './CurrentPage/CurrentPageSlice'
 
 export const store = configureStore({
     reducer : {
         user : userReducer,
         comments: commentsReducer,
-        posts: postsReducer
+        posts: postsReducer,
+        page: CurrentPageReducer,
     }
 })
 

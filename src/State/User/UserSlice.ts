@@ -23,9 +23,12 @@ const userSlice = createSlice({
     },
     incrementUserPostsCount: (state) => {
       state.posts_count += 1;
+    },
+    decreaseUserPostsCount: (state) => {
+      state.posts_count -= 1;
     }
   }
 });
 
-export const { saveUserData, incrementUserCommentsCount, incrementUserPostsCount } = userSlice.actions;
+export const { saveUserData, incrementUserCommentsCount, incrementUserPostsCount , decreaseUserPostsCount } = userSlice.actions;
 export default userSlice.reducer;

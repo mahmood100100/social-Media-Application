@@ -6,6 +6,8 @@ import Noti from "../../assets/Images/noti.png";
 import Comment from "../../assets/Images/comment.png";
 import { UilSetting } from "@iconscout/react-unicons";
 import styles from './TrendsSide.module.css';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../State/Store';
 
 export interface IconProps extends React.SVGProps<SVGSVGElement> {
     size?: string;
@@ -15,6 +17,7 @@ export interface IconProps extends React.SVGProps<SVGSVGElement> {
 
 const TrendsSide: React.FC = () => {
   const [modalOpened, setModalOpened] = useState<boolean>(false);
+  const page = useSelector((state : RootState) => state.page.currentPage)
 
   return (
     <div className={styles.TrendsSide}>
@@ -25,9 +28,9 @@ const TrendsSide: React.FC = () => {
         <img src={Comment} alt="Comments" />
       </div>
       <TrendCard />
-      <button className={`${styles.rButton} button`} onClick={() => setModalOpened(true)}>
+      {page !== "userProfile" && <button className={`${styles.rButton} button`} onClick={() => setModalOpened(true)}>
         Share
-      </button>
+      </button>}
       <ShareModal modalOpened={modalOpened} setModalOpened={setModalOpened} />
     </div>
   );

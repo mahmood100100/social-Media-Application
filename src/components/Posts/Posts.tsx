@@ -1,15 +1,15 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Post from '../Post/Post';
 import { fetchPosts } from '../../Api/PostsApi';
 import { GetPost } from '../../DataTypes/PostType';
 import { RootState } from '../../State/Store';
-import { savePosts } from '../../state/Posts/PostsSlice';
+import { savePosts, clearPosts } from '../../state/Posts/PostsSlice';
 import styles from './Posts.module.css';
 
 const Posts: React.FC = () => {
   const dispatch = useDispatch();
-  const posts: GetPost[] = useSelector((state: RootState) => state.posts);
+  const posts: GetPost[] = useSelector((state: RootState) => state.posts.homePosts);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,12 +20,13 @@ const Posts: React.FC = () => {
   const loadPosts = async (page: number) => {
     loadingRef.current = true;
     setLoading(true);
-    let newPosts : GetPost[] = [];
+    let newPosts: GetPost[] = [];
     try {
-       newPosts = await fetchPosts(page);
+      newPosts = await fetchPosts(page);
       if (newPosts.length === 0) {
         setHasMore(false);
       } else {
+        dispatch(savePosts({ posts: newPosts, page: "home" }));
         setCurrentPage(page);
       }
     } catch (error: any) {
@@ -33,36 +34,37 @@ const Posts: React.FC = () => {
     } finally {
       setLoading(false);
       loadingRef.current = false;
-      dispatch(savePosts(newPosts));
     }
   };
 
   useEffect(() => {
-    loadPosts(currentPage);
-  }, []);
+    loadPosts(1);
+    return () => {
+      dispatch(clearPosts());
+    };
+  }, [dispatch]);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (
-      hasMore &&
       !loadingRef.current &&
-      window.innerHeight + window.scrollY >= document.body.offsetHeight - 1 &&
-      currentPage !== currentPage + 1
+      hasMore &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 100
     ) {
       loadPosts(currentPage + 1);
     }
-  };
+  }, [currentPage, hasMore]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasMore, currentPage]);
+  }, [handleScroll]);
 
   return (
     <div className={styles.Posts}>
-      {posts.map(post => (
-        <Post key={post.id} post={post} />
+      {posts.map((post, index) => (
+        <Post key={index} post={post} />
       ))}
       {loading && (
         <div className={styles.cards}>
