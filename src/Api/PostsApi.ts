@@ -1,29 +1,49 @@
-import postPic1 from '../assets/Images/postpic1.jpg';
-import postPic2 from '../assets/Images/postpic2.jpg';
-import postPic3 from '../assets/Images/postpic3.jpg';
+import api from './ApiConfig';
+import { CreatePost, DeletePost, GetPost } from '../DataTypes/PostType';
 
-import { PostType } from '../DataTypes/PostType';
+export const fetchPosts = async (currentPage: number): Promise<GetPost[]> => {
+  try {
+    const response = await api.get(`/posts?page=${currentPage}`);
+    const postsData: GetPost[] = response.data.data;
+    return postsData;
+  } catch (error) {
+    throw "Error fetching posts, please try again";
+  }
+};
 
-export const PostsData: PostType[] = [
-  {
-    img: postPic1,
-    name: 'Tzuyu',
-    desc: "Happy New Year all friends! #2023",
-    likes: 2300,
-    liked: true,
-  },
-  {
-    img: postPic2,
-    name: 'Maryam',
-    desc: "Party time :)",
-    likes: 2300,
-    liked: false,
-  },
-  {
-    img: postPic3,
-    name: "Salena Gomez",
-    desc: "At Archery Festival",
-    likes: 800,
-    liked: false,
-  },
-];
+export const fetchUserPosts = async (userId: number): Promise<GetPost[]> => {
+  try {
+    const response = await api.get(`/users/${userId}/posts?sortBy=created_at&orderBy=des`);
+    const userPosts: GetPost[] = response.data.data;
+    return userPosts;
+  } catch (error) {
+    throw "Error fetching posts, please try again";
+  }
+};
+
+export const addPost = async (postData: CreatePost): Promise<GetPost> => {
+  try {
+    const response = await api.post('/posts', postData, { headers: { 'Content-Type': 'multipart/form-data' } });
+    return response.data.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const updatePost = async (postId : number , body: string): Promise<GetPost> => {
+  try {
+    const response = await api.put(`/posts/${postId}`, {body});
+    return response.data.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const deletePost = async (postId: number): Promise<GetPost> => {
+  try {
+    const response = await api.delete(`/posts/${postId}`);
+    return response.data.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};

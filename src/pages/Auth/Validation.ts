@@ -1,14 +1,13 @@
 import * as yup from "yup";
 
 export const registrationSchema = yup.object({
-    firstname: yup.string()
-        .required("firstname is required")
+    name: yup.string()
+        .required("name is required")
         .min(6, "must be at least 6 characters")
         .max(15, "must not exceed 15 characters"),
-    lastname: yup.string()
-        .required("lastname is required")
-        .min(3, "must be at least 3 characters")
-        .max(15, "must not exceed 15 characters"),
+    email: yup.string()
+    .email()
+    .required("email is required"),
     username: yup.string()
         .required("username is required")
         .min(3, "must be at least 3 characters")
@@ -19,7 +18,7 @@ export const registrationSchema = yup.object({
     confirmpass: yup.string()
         .oneOf([yup.ref('password'), null as any], 'Passwords must match')
         .required('Confirm password is required'),
-    profilePicture: yup.mixed().test('fileType', 'Invalid file format, only image files are allowed', function (this, value) {
+    image: yup.mixed().test('fileType', 'Invalid file format, only image files are allowed', function (this, value) {
         if (!value) return true;
         if (value instanceof File) 
             return value.type.startsWith('image/');

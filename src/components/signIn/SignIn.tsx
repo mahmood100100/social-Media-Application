@@ -1,38 +1,60 @@
-import { Link } from 'react-router-dom'
-import styles from '../../pages/Auth/Auth.module.css'
-import './SignIn.css'
-import { logInSchema } from '../../pages/Auth/Validation'
-import {useFormik} from 'formik'
-import { Bounce, toast } from 'react-toastify'
-
-interface FormValues {
-  username: string;
-  password: string;
-}
+import { Link, useNavigate } from 'react-router-dom';
+import styles from '../../pages/Auth/Auth.module.css';
+import './SignIn.css';
+import { logInSchema } from '../../pages/Auth/Validation.ts';
+import { useFormik } from 'formik';
+import { Bounce, toast } from 'react-toastify';
+import { userLogin } from '../../Api/AuthApi.ts';
+import { UserSignInValues } from '../../DataTypes/UserType.ts';
+import { useDispatch } from 'react-redux';
+import { saveUserData } from '../../State/User/UserSlice.ts'
 
 function SignIn() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const initialValues: FormValues = {
+  const initialValues: UserSignInValues = {
     username: '',
     password: '',
   };
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values)
-    toast.success('your accout created successfully', {
-      position: "top-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
+  const onSubmit = async (values: UserSignInValues) => {
+    const response = await userLogin(values);
+    if (response.data) {
+      toast.success('Login successfully', {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
       });
+
+      localStorage.setItem('userToken', response.data.token);
+      localStorage.setItem('userId' , response.data.user.id );
+
+      dispatch(saveUserData(response.data.user));
+
+      navigate('/home');
+    } else if (response.error) {
+      toast.error(response.error, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
   };
 
-  const formik = useFormik<FormValues>({
+  const formik = useFormik<UserSignInValues>({
     initialValues,
     onSubmit,
     validationSchema: logInSchema,
@@ -52,8 +74,7 @@ function SignIn() {
         transition: Bounce,
       });
     }
-  }
-
+  };
 
   return (
     <div className={styles['right-section']}>
@@ -95,18 +116,17 @@ function SignIn() {
           </div>
         </div>
 
-        <div className = {styles['to-sign-in-or-up']}>
-          <span style={{ fontSize: '15px', marginRight : '10px' }}>
-            Don't have an account Sign up
+        <div className={styles['to-sign-in-or-up']}>
+          <span style={{ fontSize: '15px', marginRight: '10px' }}>
+            Don't have an account? Sign up
           </span>
-          <Link to={"signUp"} className={styles['sign-link']}>Sign Up</Link>
+          <Link to="signUp" className={styles['sign-link']}>Sign Up</Link>
         </div>
 
         <button onClick={checkValidity} className={`${styles.authButton} button`} type="submit">SignIn</button>
-
       </form>
     </div>
-
-  )
+  );
 }
+
 export default SignIn;

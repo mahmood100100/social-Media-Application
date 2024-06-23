@@ -1,53 +1,61 @@
 :root {
-    --black: #242d49;
-    --orange: #fca61f;
-    --buttonBg: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);
-    --cardColor: rgba(255, 255, 255, 0.64);
-    --inputColor: rgba(40, 52, 62, 0.07);
-    --profileShadow: 0px 4px 17px 2px rgba(0, 0, 0, 0.25);
-    --hrColor: #cfcdcd;
-    --gray: rgba(36, 45, 73, 0.65);
-    --photo: #4CB256;
-    --location: #EF5757;
-    --shedule: #E1AE4A;
-    --video: #4A4EB7;
+  --black: #242d49;
+  --orange: #fca61f;
+  --buttonBg: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);
+  --cardColor: rgba(255, 255, 255, 0.64);
+  --inputColor: rgba(40, 52, 62, 0.07);
+  --profileShadow: 0px 4px 17px 2px rgba(0, 0, 0, 0.25);
+  --hrColor: #cfcdcd;
+  --gray: rgba(36, 45, 73, 0.65);
+  --photo: #4CB256;
+  --location: #EF5757;
+  --shedule: #E1AE4A;
+  --video: #4A4EB7;
 
-  }
-.App{
-    color: var(--black);
-    background: #f3f3f3;
-    padding: 1rem 1rem;
-  }
-
-.blur{
-    position: absolute;
-    width: 22rem;
-    height: 14rem;
-    border-radius: 50%;
-    background: #a6ddf0;
-    filter: blur(72px)  ;
-    -webkit-filter: blur(72px)  ;
 }
 
-  .button{
-    display: flex;
-    text-decoration: none;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    border:none;
-    border-radius: 0.5rem;
-    background: var(--buttonBg);
-    transition:all 100ms ease-out;
-  }
-  
-  .button:hover{
-    cursor: pointer;
-    color: var(--orange);
-    background: transparent;
-    border: 2px solid var(--orange);
-  }
-  
-  ::-webkit-scrollbar{
-    display: none;
-  }
+.App {
+  position: relative;
+  color: var(--black);
+  background: #f3f3f3;
+  padding-inline: 2rem;
+  overflow-y: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.blur {
+  position: absolute;
+  width: 22rem;
+  height: 14rem;
+  border-radius: 50%;
+  background: #a6ddf0;
+  filter: blur(72px);
+  -webkit-filter: blur(72px);
+}
+
+.button {
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  background: var(--buttonBg);
+  font-weight: 600;
+  border: 2px solid white;
+  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -ms-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+}
+
+.button:hover {
+  cursor: pointer;
+  color: var(--orange);
+  background: transparent;
+  border: 2px solid var(--orange);
+
+}

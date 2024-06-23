@@ -4,6 +4,7 @@
     background-color: var(--cardColor);
     padding: 1rem;
     border-radius: 1rem;
+    width: 100%;
 }
 
 .PostShareImg {
@@ -16,12 +17,22 @@
     display: flex;
     flex-direction: column;
     width: 90%;
-    gap: 1rem;
+}
+
+.postContent {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    overflow: hidden;
 }
 
 .PostShareInput {
     background-color: var(--inputColor);
-    border-radius: 10px;
     padding: 10px;
     font-size: 17px;
     border: none;
@@ -53,9 +64,10 @@
     font-size: 12px
 }
 
-
 .previewImage {
     position: relative;
+    margin-top: 20px;
+    overflow: hidden;
 }
 
 .previewImage>svg {

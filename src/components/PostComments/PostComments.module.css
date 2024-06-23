@@ -1,0 +1,41 @@
+.commentsSection {
+    width: 100%;
+    margin: 0 0 0px 0;
+    font-family: Arial, sans-serif;
+}
+
+.comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f2f5;
+}
+
+.profileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.commentContent {
+    max-width: 80%;
+}
+
+.commentContent span {
+    cursor: pointer;
+}
+
+.commentAuthor {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.commentBody {
+    margin: 5px 0 0 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

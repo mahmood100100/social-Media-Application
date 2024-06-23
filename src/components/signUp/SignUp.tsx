@@ -1,53 +1,81 @@
 import styles from '../../pages/Auth/Auth.module.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { registrationSchema } from '../../pages/Auth/Validation';
 import { Bounce, toast } from 'react-toastify';
+import { AddUser } from '../../Api/AuthApi';
+import { useState } from 'react';
+import {UserSignUpValues} from '../../DataTypes/UserType'
 
-interface FormValues {
-  firstname: string;
-  lastname: string;
-  username: string;
-  password: string;
-  confirmpass: string;
-  profilePicture: File | null;
+interface regisrtationErrorsObject {
+  username: string[] | null;
+  email: string[] | null;
 }
 
 function SignUp() {
-  const initialValues: FormValues = {
-    firstname: '',
-    lastname: '',
+
+  const [regisrtationErrors, setRegisrtionErrors] = useState<regisrtationErrorsObject | null>(null);
+  const navigate = useNavigate();
+  const initialValues: UserSignUpValues = {
+    name: '',
+    email: '',
     username: '',
     password: '',
     confirmpass: '',
-    profilePicture: null,
+    image: null,
   };
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = async (values: UserSignUpValues) => {
     const formData = new FormData();
+
     Object.entries(values).forEach(([key, value]) => {
-      if (value instanceof File || value == null) {
+      if (key === 'image' && !value) {
+        return;
+      }
+      
+      if (value instanceof File) {
         formData.append(key, value, value.name);
       } else {
         formData.append(key, value);
       }
     });
 
-    toast.success('your accout created successfully', {
-      position: "top-left",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
+    const response = await AddUser(formData);
+    if (response.data) {
+      toast.success(response.data, {
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
       });
+       navigate("/auth")
 
+    } else if (response.errors) {
+
+      setRegisrtionErrors(response.errors);
+
+      if (response.errors.network) {
+        toast.error('An error occurred. Please try again later.', {
+          position: "top-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+      }
+    }
   };
 
-  const formik = useFormik<FormValues>({
+  const formik = useFormik<UserSignUpValues>({
     initialValues,
     onSubmit,
     validationSchema: registrationSchema,
@@ -69,42 +97,56 @@ function SignUp() {
     }
   }
 
+  const handleErrorOverlay = (errorType: string) => {
+    if (!regisrtationErrors) return;
+    if (errorType === "email" && regisrtationErrors.email) {
+      setRegisrtionErrors(prevErrors => ({ ...prevErrors!, email: null }));
+    } else if (errorType === "username" && regisrtationErrors.username) {
+      setRegisrtionErrors(prevErrors => ({ ...prevErrors!, username: null }));
+    }
+  };
+
   return (
     <div className={styles['right-section']}>
       <form className={styles.authForm} onSubmit={formik.handleSubmit}>
         <h3>Sign up</h3>
         <div className={styles['input-box']}>
           <div className={styles['form-input']}>
-            <label htmlFor="firstname">First Name</label>
+            <label htmlFor="name">Name</label>
             <input
               type="text"
-              placeholder="First Name"
+              placeholder="Enter Your Name"
               className={styles.authInput}
-              name="firstname"
-              id="firstname"
+              name="name"
+              id="name"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              value={formik.values.firstname}
+              value={formik.values.name}
             />
-            {formik.touched.firstname && formik.errors.firstname && (
-              <p className={styles['error-message']}>{formik.errors.firstname}</p>
+            {formik.touched.name && formik.errors.name && (
+              <p className={styles['error-message']}>{formik.errors.name}</p>
             )}
           </div>
           <div className={styles['form-input']}>
-            <label htmlFor="lastname">Last Name</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              placeholder="Last Name"
+              type="email"
+              placeholder="Enter your Email"
               className={styles.authInput}
-              name="lastname"
-              id="lastname"
-              onChange={formik.handleChange}
+              name="email"
+              id="email"
+              onChange={(event) => {
+                formik.handleChange(event)
+                handleErrorOverlay('email')
+              }}
               onBlur={formik.handleBlur}
-              value={formik.values.lastname}
+              value={formik.values.email}
             />
-            {formik.touched.lastname && formik.errors.lastname && (
-              <p className={styles['error-message']}>{formik.errors.lastname}</p>
+            {formik.touched.email && formik.errors.email && (
+              <p className={styles['error-message']}>{formik.errors.email}</p>
             )}
+            {regisrtationErrors && regisrtationErrors.email &&
+              <p className={styles['error-message']}>{regisrtationErrors.email[0]}</p>}
           </div>
           <div className={styles['form-input']}>
             <label htmlFor="username">Username</label>
@@ -113,15 +155,41 @@ function SignUp() {
               className={styles.authInput}
               name="username"
               id="username"
-              placeholder="Username"
-              onChange={formik.handleChange}
+              placeholder="Enter your Username"
+              onChange={(event) => {
+                formik.handleChange(event)
+                handleErrorOverlay('username')
+              }}
               onBlur={formik.handleBlur}
               value={formik.values.username}
             />
             {formik.touched.username && formik.errors.username && (
               <p className={styles['error-message']}>{formik.errors.username}</p>
             )}
+            {regisrtationErrors && regisrtationErrors.username &&
+              <p className={styles['error-message']}>{regisrtationErrors.username[0]}</p>}
           </div>
+
+          <div className={`${styles['file-input']} ${styles['form-input']}`}>
+            <label htmlFor="image">Profile Image</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              onBlur={formik.handleBlur}
+              onChange={(event) =>
+                formik.setFieldValue(
+                  'image',
+                  event.currentTarget.files ? event.currentTarget.files[0] : null
+                )
+              }
+              accept="image/*"
+            />
+            {formik.touched.image && formik.errors.image && (
+              <p className={styles['error-message']}>{formik.errors.image}</p>
+            )}
+          </div>
+          
           <div className={styles['form-input']}>
             <label htmlFor="password">Password</label>
             <input
@@ -129,7 +197,7 @@ function SignUp() {
               className={styles.authInput}
               name="password"
               id="password"
-              placeholder="Password"
+              placeholder="Enter your Password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.password}
@@ -145,32 +213,13 @@ function SignUp() {
               className={styles.authInput}
               name="confirmpass"
               id="confirmpass"
-              placeholder="Confirm Password"
+              placeholder="Confirm your Password"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.confirmpass}
             />
             {formik.touched.confirmpass && formik.errors.confirmpass && (
               <p className={styles['error-message']}>{formik.errors.confirmpass}</p>
-            )}
-          </div>
-          <div className={`${styles['file-input']} ${styles['form-input']}`}>
-            <label htmlFor="profilePicture">Profile picture</label>
-            <input
-              type="file"
-              id="profilePicture"
-              name="profilePicture"
-              onBlur={formik.handleBlur}
-              onChange={(event) =>
-                formik.setFieldValue(
-                  'profilePicture',
-                  event.currentTarget.files ? event.currentTarget.files[0] : null
-                )
-              }
-              accept="image/*"
-            />
-            {formik.touched.profilePicture && formik.errors.profilePicture && (
-              <p className={styles['error-message']}>{formik.errors.profilePicture}</p>
             )}
           </div>
         </div>

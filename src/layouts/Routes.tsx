@@ -1,21 +1,27 @@
 import { createBrowserRouter, RouteObject } from 'react-router-dom';
-import UserLayout from './UserLayout';
-import SignIn from '../Components/SignIn/SignIn';
+import UserLayout from './UserLayout.tsx';
+import SignIn from '../Components/SignIn/SignIn.tsx';
 import Auth from '../Pages/Auth/Auth';
 import SignUp from '../Components/SignUp/SignUp';
 import UserHomePage from '../Pages/UserHomePage/UserHomePage';
+import HomeProtectedRoute from '../PretectedRoutes/HomeProtectedRoute'
+import AuthProtectedRoute from '../PretectedRoutes/AuthProtectedRoute';
+import UserProfilePage from '../pages/UserProfilePage/UserProfilePage.tsx';
 
 const routes: RouteObject[] = [
   {
     path: '/',
     element: <UserLayout />,
     children: [
-      
+
     ],
   },
   {
     path: 'auth',
-    element: <Auth />,
+    element:
+    <AuthProtectedRoute>
+     <Auth />
+     </AuthProtectedRoute>,
     children: [
       {
         index: true,
@@ -28,9 +34,20 @@ const routes: RouteObject[] = [
     ],
   },
   {
-    path: 'homePage',
-    element: <UserHomePage/>
+    path: 'home',
+    element:
+      <HomeProtectedRoute>
+        <UserHomePage />
+      </HomeProtectedRoute>
+
   },
+  {
+    path: 'profile/:profileId',
+    element:
+    <HomeProtectedRoute>
+       <UserProfilePage/>
+    </HomeProtectedRoute>
+  }
 ];
 
 export const router = createBrowserRouter(routes);

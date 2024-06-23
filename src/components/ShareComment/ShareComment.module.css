@@ -1,0 +1,35 @@
+.createComment {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    border: none;
+    border-block: 1px solid #ddd;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.commentInput {
+    height: 40px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background-color: var(--inputColor);
+    border-radius: 10px;
+    margin-right: 10px;
+    width: 100%;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    cursor: pointer;
+}
