@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPage, setUserProfile } from '../../State/CurrentPage/CurrentPageSlice';
+import { setCurrentPage } from '../../State/CurrentPage/CurrentPageSlice';
 import { useParams } from 'react-router-dom'; // Import useParams
 import ProfileSide from '../../Components/ProfileSide/ProfileSide';
 import ProfileCard from '../../Components/ProfileCard/ProfileCard';

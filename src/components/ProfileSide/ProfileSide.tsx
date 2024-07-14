@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Search from '../Search/Search';
+import Search from '../Search/Search.tsx';
 import ProfileCard from '../ProfileCard/ProfileCard';
 import FollowersCard from '../FollowersCard/FollowersCard';
 import styles from './ProfileSide.module.css';

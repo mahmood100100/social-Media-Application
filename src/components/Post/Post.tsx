@@ -106,7 +106,9 @@ const Post: React.FC<PostProps> = ({ post }) => {
     <div className={styles.Post}>
       <div className={styles.header}>
         <div onClick={() => {
-          navigate(`/profile/${post.author.id}`)
+          if(page === "home") {
+            navigate(`/profile/${post.author.id}`)
+          }
         }} className={styles.left}>
           {post.author?.profile_image && (
             <img src={post.author?.profile_image} alt={post.author?.name} className={styles.authorImage} />

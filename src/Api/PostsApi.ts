@@ -1,5 +1,5 @@
 import api from './ApiConfig';
-import { CreatePost, DeletePost, GetPost } from '../DataTypes/PostType';
+import { CreatePost, GetPost } from '../DataTypes/PostType';
 
 export const fetchPosts = async (currentPage: number): Promise<GetPost[]> => {
   try {

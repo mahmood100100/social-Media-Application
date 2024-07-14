@@ -22,7 +22,7 @@ function UserPosts() {
             setLoading(true);
             try {
                 const userPosts = await fetchUserPosts(userId);
-                dispatch(savePosts({ posts: userPosts, page: "" }));
+                dispatch(savePosts({ posts: userPosts, page: "userProfile" }));
             } catch (error) {
                 setError('Failed to fetch user posts.');
             } finally {
